@@ -14,7 +14,6 @@ import type {
   ProductDetailResponseData,
   ProductOptionsResponseData,
   ProductRequestParams,
-  ProductsResponseRawData,
   RegisterUserRequest,
   RegisterUserResponse,
 } from '@/api/types';
@@ -53,17 +52,19 @@ export const loginUser = async ({ email, password }: LoginUserRequest) => {
   }
 };
 
-export const getCategories = async () => {
-  const response = await fetchInstance.get<CategoryResponseData>(getCategoriesPath());
+export const getCategories = async (): Promise<CategoryResponseData> => {
+  const response = await fetchInstance.get(getCategoriesPath());
 
-  return response.data;
+  return response.data.data;
 };
 
-export const getProducts = async (
+export const getProducts: (
+  params: ProductRequestParams,
+) => Promise<PaginationResponseData<ProductData>> = async (
   params: ProductRequestParams,
 ): Promise<PaginationResponseData<ProductData>> => {
-  const response = await fetchInstance.get<ProductsResponseRawData>(getProductsPath(params));
-  const data = response.data;
+  const response = await fetchInstance.get(getProductsPath(params));
+  const data = response.data.data;
 
   return {
     products: data.content,
