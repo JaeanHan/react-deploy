@@ -3,26 +3,18 @@ import {
   useInfiniteQuery,
   type UseInfiniteQueryResult,
 } from '@tanstack/react-query';
-
 import type { PaginationResponseData, ProductRequestParams } from '@/api/types';
 import { getProducts } from '@/api/utils';
 import type { ProductData } from '@/types';
 
-import { BASE_URL } from '../instance';
+import { fetchInstance } from '../instance';
 
 export type Params = Pick<ProductRequestParams, 'maxResults' | 'categoryId'> & {
   initPageToken?: string;
 };
 
 export const getProductsPath = ({ categoryId, pageToken, maxResults }: ProductRequestParams) => {
-  const params = new URLSearchParams();
-
-  params.append('categoryId', categoryId);
-  params.append('sort', 'name,asc');
-  if (pageToken) params.append('page', pageToken);
-  if (maxResults) params.append('size', maxResults.toString());
-
-  return `${BASE_URL}/api/products?${params.toString()}`;
+  return `${fetchInstance.defaults.baseURL}/api/products/categories/${categoryId}?page=${pageToken ? pageToken : 0}&${maxResults ? `size=${maxResults}&` : ''}sort=price,asc`;
 };
 
 export const useGetProducts = ({
