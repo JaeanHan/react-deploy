@@ -18,11 +18,18 @@ type Props = ProductDetailRequestParams;
 export const OptionSection = ({ productId }: Props) => {
   const { data: detail } = useGetProductDetail({ productId });
   const { data: options } = useGetProductOptions({ productId });
-
-  const [selectedOption, setSelectedOption] = useState<{ id: number; count: string }>({
-    id: options?.[0]?.id || 0,
-    count: '1',
-  });
+  const prevOrderHistory = orderHistorySessionStorage.get();
+  const [selectedOption, setSelectedOption] = useState<{ id: number; count: string }>(() =>
+    prevOrderHistory
+      ? {
+          id: prevOrderHistory.id,
+          count: String(prevOrderHistory.count),
+        }
+      : {
+          id: options?.[0].id || 0,
+          count: '1',
+        },
+  );
 
   const totalPrice = useMemo(() => {
     return detail.price * Number(selectedOption.count);
@@ -37,6 +44,13 @@ export const OptionSection = ({ productId }: Props) => {
       );
 
       if (!isConfirm) return;
+
+      orderHistorySessionStorage.set({
+        id: selectedOption.id,
+        count: parseInt(selectedOption.count),
+        productId: parseInt(productId),
+      });
+
       return navigate(getDynamicPath.login());
     }
 
