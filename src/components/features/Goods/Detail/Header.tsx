@@ -1,43 +1,18 @@
 import { Divider } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense } from 'react';
 
 import { useGetProductDetail } from '@/api/hooks/useGetProductDetail';
 import type { ProductDetailRequestParams } from '@/api/types';
-import { addToWishlist, getWishlist } from '@/api/utils';
-import { Button } from '@/components/common/Button';
+import { AsyncBoundary } from '@/components/common/AsyncBoundary';
+import { FlexibleWishlistButton } from '@/components/features/Goods/Detail/FlexibleWishlistButton';
 import { useAuth } from '@/provider/Auth';
 import { breakpoints } from '@/styles/variants';
 
 type Props = ProductDetailRequestParams;
 
-const page = 0;
-const size = 10;
-
 export const GoodsDetailHeader = ({ productId }: Props) => {
   const { data: detail } = useGetProductDetail({ productId });
   const authInfo = useAuth();
-  const addWishlistMutation = useMutation({
-    mutationFn: addToWishlist,
-    onSuccess: () => {
-      alert('관심 등록 완료');
-    },
-    onError: () => {
-      alert('위시리스트 추가 실패(서버)');
-    },
-  });
-  const { data } = useSuspenseQuery({
-    queryKey: ['wishlist', page, size],
-    queryFn: () => getWishlist(page, size),
-  });
-
-  const hasItemAlreadyAddedToWishList =
-    data.contents.find((item) => item.id === parseInt(productId)) === undefined;
-
-  const handleAddToWishlist = async () => {
-    addWishlistMutation.mutate(productId);
-  };
 
   return (
     <Wrapper>
@@ -48,17 +23,11 @@ export const GoodsDetailHeader = ({ productId }: Props) => {
         <Divider color="#f5f5f5" />
         <Notice>카톡 친구가 아니어도 선물 코드로 선물 할 수 있어요!</Notice>
         <Divider color="#f5f5f5" />
-        <Suspense fallback={<div>위시리스트 확인중...</div>}>
-          {authInfo && (
-            <Button
-              theme={'darkGray'}
-              disabled={hasItemAlreadyAddedToWishList}
-              onClick={handleAddToWishlist}
-            >
-              {hasItemAlreadyAddedToWishList ? '위시리스트에 추가됨 ✓' : '위시리스트에 추가'}
-            </Button>
-          )}
-        </Suspense>
+        {authInfo && (
+          <AsyncBoundary pendingFallback={<div>위시리스트 확인중...</div>} rejectedFallback={null}>
+            <FlexibleWishlistButton productId={productId} />
+          </AsyncBoundary>
+        )}
       </InfoWrapper>
     </Wrapper>
   );
