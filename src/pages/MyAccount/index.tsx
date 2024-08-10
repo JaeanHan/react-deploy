@@ -29,7 +29,7 @@ export const MyAccountPage = () => {
   return (
     <Wrapper>
       {authInfo?.name}님 안녕하세요!
-      <div>현재 포인트: {pointsData?.points} 점</div>
+      <div>현재 포인트: {pointsData?.points?.toLocaleString() ?? 0} 점</div>
       <Spacing height={64} />
       <Button
         size="small"

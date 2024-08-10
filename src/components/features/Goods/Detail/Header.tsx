@@ -33,7 +33,7 @@ export const GoodsDetailHeader = ({ productId }: Props) => {
       <GoodsImage src={detail.imageUrl} alt={detail.name} />
       <InfoWrapper>
         <Title>{detail.name}</Title>
-        <Price>{detail.price}원</Price>
+        <Price>{detail.price.toLocaleString()}원</Price>
         <Divider color="#f5f5f5" />
         <Notice>카톡 친구가 아니어도 선물 코드로 선물 할 수 있어요!</Notice>
         <Divider color="#f5f5f5" />

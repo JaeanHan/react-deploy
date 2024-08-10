@@ -23,7 +23,7 @@ export const DefaultGoodsItems = ({
         <Subtitle>{subtitle}</Subtitle>
         <Title>{title}</Title>
         <Amount>
-          {amount}
+          {amount.toLocaleString()}
           <span>원</span>
         </Amount>
       </InfoWrapper>

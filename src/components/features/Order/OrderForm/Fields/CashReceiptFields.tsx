@@ -50,7 +50,7 @@ export const CashReceiptFields = ({ totalPrice }: ICashReceiptFields) => {
         disabled={!hasCashReceipt}
       />
       <Spacing height={16} />
-      <Text fontWeight={500}>현재 보유 포인트: {pointsData?.points ?? 0}</Text>
+      <Text fontWeight={500}>현재 보유 포인트: {pointsData?.points.toLocaleString() ?? 0}</Text>
       <Spacing />
       <Input
         type="number"

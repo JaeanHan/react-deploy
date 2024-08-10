@@ -29,11 +29,11 @@ export const OrderFormOrderInfo = ({ orderHistory }: Props) => {
       <Divider color="#ededed" />
       <ItemWrapper>
         <LabelText>최종 결제금액</LabelText>
-        <HeadingText>{totalPrice}원</HeadingText>
+        <HeadingText>{totalPrice.toLocaleString()}원</HeadingText>
       </ItemWrapper>
       <Divider color="#ededed" />
       <Spacing height={32} />
-      <Button type="submit">{totalPrice}원 결제하기</Button>
+      <Button type="submit">{totalPrice.toLocaleString()}원 결제하기</Button>
     </Wrapper>
   );
 };
