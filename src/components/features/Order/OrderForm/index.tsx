@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { createOrder, getPoints } from '@/api/utils';
 import { Spacing } from '@/components/common/layouts/Spacing';
 import { SplitLayout } from '@/components/common/layouts/SplitLayout';
+import { RouterPath } from '@/routes/path';
 import type { OrderFormData, OrderHistory } from '@/types';
 
 import { HEADER_HEIGHT } from '../../Layout/Header';
@@ -24,7 +25,10 @@ export const OrderForm = ({ orderHistory }: Props) => {
   });
   const createOrderMutation = useMutation({
     mutationFn: createOrder,
-    onSuccess: () => alert('주문이 완료되었습니다.'),
+    onSuccess: () => {
+      alert('주문이 완료되었습니다.');
+      window.location.href = RouterPath.myAccount;
+    },
     onError: () => alert('주문에 실패했습니다.'),
   });
 
